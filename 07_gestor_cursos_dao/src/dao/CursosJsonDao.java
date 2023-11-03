@@ -1,4 +1,4 @@
-package service;
+package dao;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 
 import model.Curso;
 
-public class FicheroService {
+public class CursosJsonDao {
 	private Stream<Curso> getCursos(){
 		String ruta="c:\\temp\\cursos.json";
 		Gson gson=new Gson();
@@ -30,22 +30,5 @@ public class FicheroService {
 				.collect(Collectors.toList());
 	}
 	
-	public void actualizarDatos() {
-		var cursosService=new CursosService();
-		var alumnosService=new AlumnosService();
-		cursos() //recorremos cursos
-		.forEach(c->{
-			if(!cursosService.existeCurso(c.getIdCurso())){//si curso no está en BD se añade
-				cursosService.guardarCurso(c);
-			}
-			//recorremos alumnos de cada curso
-			c.getAlumnos()
-			.forEach(a->{
-					if(!alumnosService.existeAlumno(a.getDni())) {
-						a.setCurso(c.getIdCurso());//le asignamos al alumno el curso al que pertenece antes de guardarlo
-						alumnosService.guardarAlumno(a);
-					}
-			});
-		});
-	}
+	
 }

@@ -1,15 +1,16 @@
-package service;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Alumno;
 
-public class AlumnosService {
+public class AlumnosDao {
 	String cadenaCon="jdbc:mysql://localhost:3306/formacion";
 	String user="root";
 	String pwd="root";
@@ -47,6 +48,7 @@ public class AlumnosService {
 		}
 	}
 	public boolean guardarAlumnos(List<Alumno> alumnos) {
+
 		try(Connection con=DriverManager.getConnection(cadenaCon, user, pwd);){
 			String sql="insert into alumnos (dni,nombre,edad,nota,curso) values (?,?,?,?,?)";
 			//se crea el preparestatement a partir de la sql
@@ -66,5 +68,46 @@ public class AlumnosService {
 			ex.printStackTrace();
 			return false;
 		}
+	}
+	public List<Alumno> alumnos(){
+		List<Alumno> alumnos=new ArrayList<>();
+		try(Connection con=DriverManager.getConnection(cadenaCon, user, pwd);){				
+			String sql="select * from alumnos";
+			PreparedStatement ps=con.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				alumnos.add(new Alumno(rs.getString("dni"),
+							rs.getString("nombre"),
+							rs.getInt("edad"),
+							rs.getDouble("nota"),
+							rs.getInt("curso")
+						));
+			}
+		}
+		catch(SQLException ex) {
+			ex.printStackTrace();		
+		}
+		return alumnos;
+	}
+	public List<Alumno> alumnos(int curso){
+		List<Alumno> alumnos=new ArrayList<>();
+		try(Connection con=DriverManager.getConnection(cadenaCon, user, pwd);){				
+			String sql="select * from alumnos where curso=?";
+			PreparedStatement ps=con.prepareStatement(sql);
+			ps.setInt(1, curso);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				alumnos.add(new Alumno(rs.getString("dni"),
+						rs.getString("nombre"),
+						rs.getInt("edad"),
+						rs.getDouble("nota"),
+						rs.getInt("curso")
+					));
+			}
+		}
+		catch(SQLException ex) {
+			ex.printStackTrace();		
+		}
+		return alumnos;
 	}
 }
