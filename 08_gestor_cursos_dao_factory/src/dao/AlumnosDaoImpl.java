@@ -11,7 +11,10 @@ import java.util.List;
 import helpers.ConnectionLocator;
 import model.Alumno;
 import static helpers.ConnectionLocator.getConnection;
-public class AlumnosDao {
+public class AlumnosDaoImpl implements AlumnosDao {
+	
+	
+	@Override
 	public boolean existeAlumno(String dni) {
 		try(Connection con=getConnection()){
 			String sql="select * from alumnos where dni=?";
@@ -25,6 +28,7 @@ public class AlumnosDao {
 			return false;
 		}
 	}
+	@Override
 	public boolean guardarAlumno(Alumno alumno) {
 		try(Connection con=getConnection()){
 			String sql="insert into alumnos (dni,nombre,edad,nota,curso) values (?,?,?,?,?)";
@@ -44,6 +48,7 @@ public class AlumnosDao {
 			return false;
 		}
 	}
+	@Override
 	public boolean guardarAlumnos(List<Alumno> alumnos) {
 
 		try(Connection con=getConnection()){
@@ -66,6 +71,7 @@ public class AlumnosDao {
 			return false;
 		}
 	}
+	@Override
 	public List<Alumno> alumnos(){
 		List<Alumno> alumnos=new ArrayList<>();
 		try(Connection con=getConnection()){				
@@ -86,6 +92,7 @@ public class AlumnosDao {
 		}
 		return alumnos;
 	}
+	@Override
 	public List<Alumno> alumnos(int curso){
 		List<Alumno> alumnos=new ArrayList<>();
 		try(Connection con=getConnection()){				
@@ -107,6 +114,7 @@ public class AlumnosDao {
 		}
 		return alumnos;
 	}
+	@Override
 	public boolean eliminarAlumno(String dni) {
 		try(Connection con=getConnection()){
 			String sql="delete from alumnos where dni=?";

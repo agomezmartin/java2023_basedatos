@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,9 +11,10 @@ import java.util.List;
 
 import model.Curso;
 import static helpers.ConnectionLocator.getConnection;
-public class CursosDao {
+public class CursosDaoImpl implements CursosDao {
 	
 	
+	@Override
 	public boolean existeCurso(int idCurso) {
 		try(Connection con=getConnection()){
 			String sql="select * from cursos where idCurso=?";
@@ -26,9 +28,10 @@ public class CursosDao {
 			return false;
 		}
 	}
+	@Override
 	public boolean guardarCurso(Curso curso) {
 		try(Connection con=getConnection()){
-			String sql="insert into cursos (idCurso,curso,duracion,precio) values (?,?,?,?)";
+			String sql="insert into cursos (idCurso,curso,duracion,precio,fechaInicio) values (?,?,?,?,?)";
 			//se crea el preparestatement a partir de la sql
 			PreparedStatement ps=con.prepareStatement(sql);
 			//sustituimos parámetros por valores
@@ -36,6 +39,8 @@ public class CursosDao {
 			ps.setString(2, curso.getCurso());
 			ps.setInt(3, curso.getDuracion());
 			ps.setDouble(4, curso.getPrecio());
+			//tranformamos el objeto LocalDate en un java.sql.Date
+			ps.setDate(5, Date.valueOf(curso.getFechaInicio()));
 			ps.execute();
 			return true;
 		}
@@ -44,6 +49,7 @@ public class CursosDao {
 			return false;
 		}
 	}
+	@Override
 	public List<Curso> cursos(){
 		List<Curso> cursos=new ArrayList<>();
 		try(Connection con=getConnection()){				
@@ -55,6 +61,7 @@ public class CursosDao {
 							rs.getString("curso"),
 							rs.getInt("duracion"),
 							rs.getDouble("precio"),
+							rs.getDate("fechaInicio").toLocalDate(),
 							null  //lista de alumnos nula
 						));
 			}

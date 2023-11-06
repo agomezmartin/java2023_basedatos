@@ -10,9 +10,10 @@ import java.util.List;
 
 import model.Curso;
 import static helpers.ConnectionLocator.getConnection;
-public class CursosDao {
+public class CursosDaoImpl implements CursosDao {
 	
 	
+	@Override
 	public boolean existeCurso(int idCurso) {
 		try(Connection con=getConnection()){
 			String sql="select * from cursos where idCurso=?";
@@ -26,6 +27,7 @@ public class CursosDao {
 			return false;
 		}
 	}
+	@Override
 	public boolean guardarCurso(Curso curso) {
 		try(Connection con=getConnection()){
 			String sql="insert into cursos (idCurso,curso,duracion,precio) values (?,?,?,?)";
@@ -44,6 +46,7 @@ public class CursosDao {
 			return false;
 		}
 	}
+	@Override
 	public List<Curso> cursos(){
 		List<Curso> cursos=new ArrayList<>();
 		try(Connection con=getConnection()){				

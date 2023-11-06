@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import service.FormacionService;
+import service.FormacionServiceFactory;
 
 public class JOperacionesCursos extends JFrame {
 
@@ -50,7 +51,7 @@ public class JOperacionesCursos extends JFrame {
 		JMenuItem menuActualizar = new JMenuItem("Actualizar cursos");
 		menuActualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FormacionService service=new FormacionService();
+				FormacionService service=FormacionServiceFactory.getFormacionService();
 				service.actualizarDatos();
 			}
 		});

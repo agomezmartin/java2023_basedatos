@@ -41,7 +41,7 @@ public class JCursosAlumnos extends JFrame {
 		lblNewLabel.setBounds(81, 45, 145, 19);
 		contentPane.add(lblNewLabel);
 		
-		JComboBox cbCursos = new JComboBox();
+		JComboBox<Curso> cbCursos = new JComboBox<>();
 		cbCursos.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				Curso curso=(Curso)cbCursos.getSelectedItem();
