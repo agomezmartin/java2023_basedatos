@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +56,30 @@ public class CursosDaoImpl implements CursosDao {
 		try(Connection con=getConnection()){				
 			String sql="select * from cursos";
 			PreparedStatement ps=con.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				cursos.add(new Curso(rs.getInt("idCurso"),
+							rs.getString("curso"),
+							rs.getInt("duracion"),
+							rs.getDouble("precio"),
+							rs.getDate("fechaInicio").toLocalDate(),
+							null  //lista de alumnos nula
+						));
+			}
+		}
+		catch(SQLException ex) {
+			ex.printStackTrace();		
+		}
+		return cursos;
+	}
+	@Override
+	public List<Curso> cursosFechas(LocalDate f1, LocalDate f2) {
+		List<Curso> cursos=new ArrayList<>();
+		try(Connection con=getConnection()){				
+			String sql="select * from cursos where fechaInicio between ? and ?";
+			PreparedStatement ps=con.prepareStatement(sql);
+			ps.setDate(1, Date.valueOf(f1));
+			ps.setDate(2, Date.valueOf(f2));
 			ResultSet rs=ps.executeQuery();
 			while(rs.next()) {
 				cursos.add(new Curso(rs.getInt("idCurso"),
