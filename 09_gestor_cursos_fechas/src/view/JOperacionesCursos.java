@@ -86,5 +86,6 @@ public class JOperacionesCursos extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
 	}
 }
